@@ -1,0 +1,1 @@
+# ejemplos-de-clase-prolog
