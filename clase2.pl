@@ -1,0 +1,24 @@
+padre(abraham, herbert).
+padre(abraham, homero).
+padre(mona, homero).
+padre(clancy, marge).
+padre(jacqueline, marge).
+padre(clancy, patty).
+padre(jacqueline, patty).
+padre(clancy, selma).
+padre(jacqueline, selma).
+padre(homero, bart).
+padre(marge, bart).
+padre(homero, lisa).
+padre(marge, lisa).
+padre(homero, maggie).
+padre(marge, maggie).
+padre(selma, ling).
+
+edad(homero, 36).
+edad(homero, 34).
+edad(patty, 45).
+edad(selma, 45).
+edad(lisa, 8).
+edad(bart, 10).
+edad(maggie, 1).
