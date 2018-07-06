@@ -12,6 +12,8 @@ Lógica de Primer orden:
  - Existencia y no existencia (negación)
  - Para todo
  - Ejercicio: La familia Simpson
+ 
+![simpsons](https://github.com/pdep-mit/ejemplos-de-clase-prolog/blob/master/la-familia-simpson.png "La familia Simpson")
 
 ## Clase 3
  - Functores
