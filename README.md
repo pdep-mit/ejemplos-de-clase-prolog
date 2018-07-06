@@ -6,3 +6,16 @@
  - Consultas individuales y existenciales
  - Conjunción y disyunción
 - Ejercicio: BRUJA!!! - [video](https://www.youtube.com/watch?v=Ux6fBfXOIuo)
+
+## Clase 2
+- Lógica de Primer orden:
+ - Existencia y no existencia (negación)
+ - Para todo
+- Ejercicio: La familia Simpson
+
+## Clase 3
+- Tipos de dato compuestos - Parte 1
+ - Functores
+ - Polimorfismo
+ - De yapa: aritmética
+- Ejercicio: [Pulp Fiction](https://docs.google.com/document/d/1AJdr0JvLmqHKmwHnXFX3edzEGp306IdldtfjJpGpjQQ/edit)

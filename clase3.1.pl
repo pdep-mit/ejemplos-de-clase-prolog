@@ -1,4 +1,6 @@
-%bienUbicado
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Ejercicio: bienUbicado/1
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 viveEn(mariano, avellaneda).
 viveEn(fede, avellaneda).
@@ -10,13 +12,13 @@ quedaEn(utn, almagro).
 quedaEn(utn, villaLugano).
 quedaEn(exactas, nuniez).
 quedaEn(river, nuniez).
-quedaEn(racing, avellaneda). 
+quedaEn(racing, avellaneda).
 quedaEn(montoto, palermo).
 quedaEn(montoto, nuniez).
 quedaEn(montoto, avellaneda).
 
 tieneAuto(tomas).
-tieneAuto(fede). 
+tieneAuto(fede).
 
 llegaFacil(batman, _).
 llegaFacil(Persona, _) :-
@@ -31,12 +33,12 @@ destinosProximos(Destino, OtroDestino) :-
 
 sonVecinos(UnaPersona, OtraPersona) :-
     UnaPersona \= OtraPersona,
-    viveEn(UnaPersona, Zona), 
+    viveEn(UnaPersona, Zona),
     viveEn(OtraPersona, Zona).
 
 loLleva(UnaPersona, OtraPersona) :-
     tieneAuto(UnaPersona),
-    not(tieneAuto(OtraPersona)), 
+    not(tieneAuto(OtraPersona)),
     sonVecinos(UnaPersona, OtraPersona).
 
 quiereIr(fede, racing).
@@ -45,19 +47,22 @@ quiereIr(victoria, montoto).
 quiereIr(tomas, montoto).
 quiereIr(tomas, utn).
 
-%bienUbicado(Persona) :- viveEn(Persona, Zona),
-%                        forall(quiereIr(Persona, Lugar), quedaEn(Lugar, Zona)).
+% La consigna es resolver bienUbicado/1 con una solución basada en existencia / no existencia
+% Con para todo nos quedaría algo así:
+% bienUbicado(Persona) :- viveEn(Persona, Zona),
+%                         forall(quiereIr(Persona, Lugar), quedaEn(Lugar, Zona)).
 
-bienUbicado(Persona) :- viveEn(Persona, Zona),
-                       not((
-                       
-                       quiereIr(Persona, Lugar),
-                       not(quedaEn(Lugar, Zona))
-					   
-                       )).
-					  
+bienUbicado(Persona) :-
+  viveEn(Persona, Zona),
+  not((
+    quiereIr(Persona, Lugar),
+    not(quedaEn(Lugar, Zona))
+  )).
 
-%granCompanieroDeViaje
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Ejercicio granCompanieroDeViaje/2
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 destino(pepe, alejandria).
 destino(pepe, jartum).
 destino(pepe, roma).
@@ -75,17 +80,20 @@ habla(pepe, italiano).
 habla(juancho, arabe).
 habla(lucy, griego).
 
+mismoDestino(UnaPersona, OtraPersona) :-
+  destino(UnaPersona, Ciudad),
+  destino(OtraPersona, Ciudad),
+  UnaPersona \= OtraPersona.
 
-mismoDestino(UnaPersona, OtraPersona) :- destino(UnaPersona, Ciudad),
-                                         destino(OtraPersona, Ciudad),
-										 UnaPersona \= OtraPersona.
-										 
-hablaIdiomaDe(Persona, Ciudad) :- idioma(Ciudad, Lenguaje), 
-                                 habla(Persona, Lenguaje).
-								 
-fueSinHablar(Persona, Ciudad) :- destino(Persona, Ciudad),
-                                 not(hablaIdiomaDe(Persona, Ciudad)).
-				
-granCompanieroDeViaje(UnaPersona, OtraPersona) :- mismoDestino(UnaPersona, OtraPersona),
-                                                  forall(fueSinHablar(UnaPersona, Ciudad),
-												         hablaIdiomaDe(OtraPersona, Ciudad)).
+hablaIdiomaDe(Persona, Ciudad) :-
+  idioma(Ciudad, Lenguaje),
+  habla(Persona, Lenguaje).
+
+fueSinSaberHablar(Persona, Ciudad) :-
+  destino(Persona, Ciudad),
+  not(hablaIdiomaDe(Persona, Ciudad)).
+
+granCompanieroDeViaje(UnaPersona, OtraPersona) :-
+  mismoDestino(UnaPersona, OtraPersona),
+  forall(fueSinSaberHablar(UnaPersona, Ciudad),
+         hablaIdiomaDe(OtraPersona, Ciudad)).
