@@ -12,7 +12,7 @@ Lógica de Primer orden:
  - Existencia y no existencia (negación)
  - Para todo
  - Ejercicio: La familia Simpson
- 
+
 ![simpsons](https://github.com/pdep-mit/ejemplos-de-clase-prolog/blob/master/la-familia-simpson.png "La familia Simpson")
 
 ## Clase 3
@@ -20,3 +20,6 @@ Lógica de Primer orden:
  - Polimorfismo
  - Aritmética
  - Ejercicio: [Pulp Fiction](https://docs.google.com/document/d/1AJdr0JvLmqHKmwHnXFX3edzEGp306IdldtfjJpGpjQQ/edit)
+
+## Clase 4
+Ejercicio: [Harry Potter](https://drive.google.com/file/d/0B2odHqXdEIRNM0ktSmE3cXBiNW12aE5YdjlBSnpPQnh4Y2xV/view?usp=sharing)
