@@ -23,3 +23,7 @@ Lógica de Primer orden:
 
 ## Clase 4
 Ejercicio: [Harry Potter](https://drive.google.com/file/d/0B2odHqXdEIRNM0ktSmE3cXBiNW12aE5YdjlBSnpPQnh4Y2xV/view?usp=sharing)
+
+## Clase 5
+ - Listas
+ - Ejercicio: Brooklyn 9-9
