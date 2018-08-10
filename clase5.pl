@@ -108,6 +108,9 @@ puntosCompania([_,_],5).
 puntosCompania(Detectives,0):-
   length(Detectives,Cant),
   Cant>2.
+%% Esta última cláusula también podía hacerse de esta otra forma usando pattern matching
+%% Este patrón indica que hay al menos 3 elementos:
+%% puntosCompania([_,_,_|_],0).
 
 % Tampoco lo hicimos inversible, por los mismos motivos que puntosCompania/2.
 % Si se quisiera hacer inversible, alcanza con consultar el predicado caso/3 en ambas reglas.
