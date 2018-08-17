@@ -1,4 +1,8 @@
-/* Casas de Hogwarts Ejercitacion Pre-pre-parcial */
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%  Casas de Hogwarts
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/* Ejercitacion Pre-pre-parcial */
 lugarProhibido(bosque,50).
 lugarProhibido(seccionRestringida,10).
 lugarProhibido(tercerPiso,75).
