@@ -27,3 +27,6 @@ Ejercicio: [Harry Potter](https://drive.google.com/file/d/0B2odHqXdEIRNM0ktSmE3c
 ## Clase 5
  - Listas
  - Ejercicio: Brooklyn 9-9
+
+## Clase 6
+Ejercicio: [Who you gonna call?](https://docs.google.com/document/d/1GBORNTd2fujNy0Zs6v7AKXxRmC9wVICX2Y-pr7d1PwE/)
