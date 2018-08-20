@@ -116,7 +116,7 @@ sanCayetano(Personaje):-
 % versión polimorfica
 
 hartoDe(Personaje1, Personaje2):-
-	personaje(Personaje1, _),
+	encargo(_, Personaje1, _),
 	personaje(Personaje2, _),
 	forall(encargo(_, Personaje1, Encargo),
 		requiereInteractuarCon(Personaje2, Encargo)).
