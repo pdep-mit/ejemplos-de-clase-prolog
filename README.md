@@ -30,3 +30,7 @@ Ejercicio: [Harry Potter](https://drive.google.com/file/d/0B2odHqXdEIRNM0ktSmE3c
 
 ## Clase 6
 Ejercicio: [Who you gonna call?](https://docs.google.com/document/d/1GBORNTd2fujNy0Zs6v7AKXxRmC9wVICX2Y-pr7d1PwE/)
+
+# Ejemplos de años anteriores
+
+- [2018](https://github.com/pdep-mit/ejemplos-de-clase-prolog/tree/ejemplos-2018)
