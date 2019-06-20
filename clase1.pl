@@ -35,14 +35,13 @@ Cada respuesta es independiente de las otras, le tenemos que pedir más respuest
 */
 
 % NUEVA CONSIGNA: Queremos saber en qué lenguaje programa una persona.
-% Necesitamos establecer una RELACION entre cada persona y cada lenguaje que usa
+% Necesitamos establecer una RELACION entre cada persona y cada lenguaje que usa.
+% Sabemos que Juan programa en Haskell y Prolog, Nahue en js y Prolog.
+
 programaEn(juan, haskell).
 programaEn(juan, prolog).
 programaEn(nahue, js).
 programaEn(nahue, prolog).
-programaEn(mariana, wollok).
-programaEn(mariana, haskell).
-programaEn(gas, scala).
 
 /*
 Ahora podemos jugar un poco más con las consultas con el predicado programaEn/2:
@@ -66,92 +65,96 @@ Yes
 No
 */
 
-%% Introducimos las reglas (implicación), la conjunción y disyunción %%
+%% Introducimos las reglas (implicación) %%
+/*
+Nos damos cuenta que estaría bueno no tener que definir por extensión quiénes saben programar,
+si esa información se puede deducir en base a programaEn/1.
 
-% NUEVA CONSIGNA: Una persona cursó un cuatrimestre de PdeP si programa tanto en Haskell como en Prolog,
-% o si programa en Wollok
+Si el día de mañana tenemos que contemplar que Mora programa en Prolog, Hasekll y js estaría bueno
+tener que agregar solamente los hechos:
 
-cursoUnCuatriDePdeP(Persona):-
-	programaEn(Persona, haskell),
-	programaEn(Persona, prolog).
-cursoUnCuatriDePdeP(Persona):-
-	programaEn(Persona, wollok).
+programaEn(mora, js).
+programaEn(mora, haskell).
+programaEn(mora, prolog).
+
+Y no también que Mora sabe programar con otro hecho para el predicado sabeProgramar/1.
+
+Para eso podríamos reemplazar todos los hechos del predicado sabeProgramar/1 que consideremos redundantes,
+y agregar una REGLA para el predicado sabeProgramar/1.
+
+Por más que cambiemos la implementación, vamos a poder hacer las mismas consultas que antes.
+
+La nueva implementación quedaría así:
+*/
+sabeProgramarGeneralizado(mariana). % Como no sabemos en qué programa Mariana, este hecho lo tenemos que conservar.
+sabeProgramarGeneralizado(Persona) :-
+  programaEn(Persona, _).
+
+programaEn(mora, js).
+programaEn(mora, haskell).
+programaEn(mora, prolog).
 
 /*
-El predicado cursoUnCuatriDePdeP/1 se compone de 2 clásulas, ambas son reglas.
-
-Para la disyunción alcanza con agregar tantas cláusulas como condiciones hayan que querramos que se comporten como un "o".
-
-Para la conjunción tenemos que separar las condiciones con comas, por ende una persona satisface la condición para
-la primer cláusula de cursoUnCuatriDePdeP/1 si es cierto que programa en haskell y también es cierto que programa en prolog.
-Usamos la misma variable Persona para ambas consultas porque estamos hablando del mismo individuo.
-
-Consultas:
-?- cursoUnCuatriDePdeP(mariana).
-Yes
-
-?- cursoUnCuatriDePdeP(lassie).
-Yes
-
-?- cursoUnCuatriDePdeP(_).
-Yes
-
-?- cursoUnCuatriDePdeP(Alguien).
-Alguien = juan ;
-Alguien = mariana
-
-Estas respuestas se consiguen gracias a que juan programa tanto en Prolog como Haskell
-y a que mariana programa en Wollok.
-
 IMPORTANTE: siempre que podamos deducir el valor de verdad de algo en función del valor de verdad
 de otras cosas que ya sabemos, hay que resolverlo con reglas, ya que explican por qué ese algo debería ser cierto
 y se mantienen consistentes automáticamente!
 
-Los hechos deberían usarse sólo cuando realmente esa afirmación no depende de ninguna otra cosa.
-
-Teniendo esto en cuenta podríamos borrar los hechos que hicimos para sabeProgramar y reemplazarlos por una regla:
-sabeProgramar(Persona) :- programaEn(Persona, _).
+Los hechos deberían usarse sólo cuando realmente esa afirmación no depende de ninguna otra cosa, no tenemos cómo
+deducir que eso es cierto.
 
 Es posible combinar hechos y reglas al definir un predicado, siempre y cuando el problema lo amerite, claro.
 */
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% UNA BRUJA!
-%% https://www.youtube.com/watch?v=Ux6fBfXOIuo
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-esBruja(Persona):- flota(Persona).
+%% Introducimos la disyunción %%
 
-flota(Persona) :- estaHechaDeMadera(Persona).
+/*
+NUEVA CONSIGNA: A una persona le gusta funcional si programa en Haskell o en js.
+Identificamos que esto es una disyunción (O lógico), que aunque no nos hayamos dado cuenta, ya estábamos usando
+para los predicados anteriores. Cuando tenemos múltiples cláusulas para un predicado se genera una disyunción.
 
-%% Si agregáramos
-%% flota(nahue).
-%% La consulta esBruja(nahue) sería cierta
+Podemos resolver este problema definiendo dos reglas, una que indique que a la persona le gusta funcional
+si programa en Haskell y otra que indique que a la persona le gusta funcional si programa en js.
+*/
+leGustaFuncional(Persona):- programaEn(Persona, haskell).
+leGustaFuncional(Persona):- programaEn(Persona, js).
 
-estaHechaDeMadera(Persona) :-
-  pesa(Persona, Peso),
-  pesa(ganso, Peso),
-	Persona \= ganso. % Contamos que esto tiene que ir después de consultar pesa(Persona, Peso),
-										% porque \= no es inversible, necesita que Persona ya esté ligada con un individuo
-										% para poder hacer consultas existenciales y que respondan como queremos
+/*
+?- leGustaFuncional(Alguien).
+Alguien = juan ;
+Alguien = mora ;
+Alguien = nahue ;
+Alguien = mora.
 
-pesa(ganso, 40).
-pesa(luisa, 40).
-pesa(nahue, 70).
-pesa(julia, 50).
-pesa(ganso, 50).
+Nota: el individuo mora satisface el predicado leGustaFuncional/1 por más de un camino, es por ese
+motivo que aparece más de una vez como respuesta. Esto no es un problema, vale ignorar las respuestas repetidas.
+*/
+
+%% Introducimos la conjunción %%
+
+/*
+NUEVA CONSIGNA: Una persona cursó PdeP si programa tanto en Haskell como en Prolog.
+Identificamos que esto es una conjunción (Y lógico) y la podemos resolver con una única regla.
+
+Para la conjunción tenemos que separar las condiciones con comas, por ende una persona satisface la condición para
+la regla de cursoPdeP/1 si es cierto que programa en Haskell y también es cierto que programa en Prolog.
+Usamos la misma variable Persona para ambas consultas porque estamos hablando del mismo individuo.
+*/
+cursoPdeP(Persona):-
+	programaEn(Persona, haskell),
+	programaEn(Persona, prolog).
 
 /*
 Consultas:
-?- esBruja(julia).
+?- cursoPdeP(mora).
 Yes
 
-?- esBruja(ganso).
-No
+?- cursoPdeP(_).
+Yes
 
-?- esBruja(mora).
-No
+?- cursoPdeP(Alguien).
+Alguien = juan ;
+Alguien = mora.
 
-?- esBruja(Persona).
-Persona = luisa ;
-Persona = julia
+Estas respuestas se consiguen gracias a que juan y mora programan tanto en Prolog como Haskell.
+Eso no se cumple para nahue, porque no programa en Haskell.
 */
