@@ -1,95 +1,159 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% La familia Simpson
+%% Bob Esponja
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% Repaso de la clase anterior
 %% Arrancamos con esta base de conocimiento
+ciudadano(arenita).
+ciudadano(calamardo).
+ciudadano(patricio).
+ciudadano(bob).
 
-padre(abraham, herbert).
-padre(abraham, homero).
-padre(mona, homero).
-padre(clancy, marge).
-padre(jacqueline, marge).
-padre(clancy, patty).
-padre(jacqueline, patty).
-padre(clancy, selma).
-padre(jacqueline, selma).
-padre(homero, bart).
-padre(marge, bart).
-padre(homero, lisa).
-padre(marge, lisa).
-padre(homero, maggie).
-padre(marge, maggie).
-padre(selma, ling).
+restaurante(crustaceoCascarudo).
+restaurante(baldeDeCarnada).
+restaurante(elegante).
+restaurante(infantil).
 
-edad(homero, 36).
-edad(marge, 34).
-edad(patty, 45).
-edad(selma, 45).
-edad(lisa, 8).
-edad(bart, 10).
-edad(maggie, 1).
-edad(herbert, 30).
+comioEn(arenita,crustaceoCascarudo).
+comioEn(calamardo,crustaceoCascarudo).
+comioEn(patricio,crustaceoCascarudo).
+comioEn(bob,crustaceoCascarudo).
+comioEn(calamardo,elegante).
+comioEn(bob, infantil).
+comioEn(patricio, infantil).
 
-%% Definir los siguientes predicados:
+area(ciencia).
+area(musica).
+area(pintura).
+area(jellyfishing).
 
-% hermanos/2: dos personas que tienen el mismo padre
-hermanos(Persona1, Persona2) :-
-  padre(Padre, Persona1),
-  padre(Padre, Persona2),
+domina(arenita,ciencia).
+domina(arenita,musica).
+domina(arenita,pintura).
+domina(arenita, jellyfishing).
+domina(calamardo,musica).
+domina(calamardo,pintura).
+domina(bob,pintura).
+domina(bob, jellyfishing).
+domina(patricio, jellyfishing).
+
+% sonColegas/2 es un predicado que cumple con ser simétrico porque para todo par A y B
+% que cumpla sonColegas(A,B) también se cumple sonColegas(B, A).
+% Al usar \= aseguramos que no sea reflexivo (o sea que nadie sea colega de sí mismo).
+% Además como el predicado domina/2 es inversible, no vamos a tener problemas de inversibilidad
+% en el predicado sonColegas/2, siempre que el \= esté después de consultar domina/2 para ambos.
+sonColegas(Persona1, Persona2):-
+  domina(Persona1, Actividad),
+  domina(Persona2, Actividad),
   Persona1 \= Persona2.
 
-% abuelo/2: si el primero es el padre del padre del segundo
-abuelo(Abuelo, Nieto) :-
-  padre(Abuelo, Padre),
-  padre(Padre, Nieto).
-
-% mellizos/2: hermanos de la misma edad
-
-mellizos(Persona1, Persona2) :-
-  hermanos(Persona1, Persona2),
-  mismaEdad(Persona1, Persona2).
-
-mismaEdad(Persona1, Persona2):-
-  edad(Persona1, Edad),
-  edad(Persona2, Edad).
-
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% NOT
+%%% Predicado de orden superior de aridad 1
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% hijoUnico/1: alguien que no tiene hermanos
-hijoUnico(Persona) :-
-  padre(_, Persona),
-  not( hermanos(Persona, _) ).
+persona(Persona) :-
+  ciudadano(Persona).
+persona(cangrejo).
+persona(amigoBurbuja).
 
-% abueloCompleto/1: todos sus hijos tienen hijos
+% Alguien es extranjero si no es ciudadano
+extranjero(Persona):-
+  persona(Persona), % generamos a la Persona para que extranjero/1 sea inversible
+  not(ciudadano(Persona)).
 
-abueloCompletoConNot(Persona) :-
-  abuelo(Persona, _),
-  not(
-   (padre(Persona, Hijo),
-   not(tieneHijos(Hijo)))
-  ).
+% Un restaurante es un fracaso si nadie comió ahí
+esUnFracaso(Restaurante):-
+  restaurante(Restaurante),
+  not(comioEn(_, Restaurante)).
 
-abueloCompleto(Persona) :-
-  abuelo(Persona, _),
-  forall(padre(Persona, Hijo), tieneHijos(Hijo)).
+% distintoPublico/2 si no existen personajes que hayan comido en ambos
+distintoPublico(Resto1, Resto2):-
+  restaurante(Resto1),
+  restaurante(Resto2),
+  Resto1 \= Resto2,
+  not(comioEnAmbos(_, Resto1, Resto2)).
 
-tieneHijos(Persona) :- padre(Persona, _).
+comioEnAmbos(Persona, Resto1, Resto2):-
+    comioEn(Persona, Resto1),
+    comioEn(Persona, Resto2),
+    Resto2 \= Resto1.
 
-% esHijoMenor/1: personas que, sin ser hijos únicos,
-% sólo tienen hermanos mayores
+% También se puede hacer de esta otra forma si no nos interesa la abstracción
+% para saber si un personaje comió en ambos restaurantes.
 
-esHijoMenor(Persona) :-
-  padre(_, Persona),
-  not(hijoUnico(Persona)),
-  forall(hermanos(Persona, Hermano),
-    esMayor(Hermano, Persona)).
+distintoPublico2(Resto1, Resto2):-
+  restaurante(Resto1),
+  restaurante(Resto2),
+  Resto1 \= Resto2,
+  not((comioEn(Persona, Resto1), comioEn(Persona, Resto2))).
 
-esMayor(PersonaMayor, PersonaMenor):-
-  edad(PersonaMayor, EdadMayor),
-  edad(PersonaMenor, EdadMenor),
-  EdadMayor > EdadMenor.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% FORALL
+%%% Predicado de orden superior de aridad 2
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Para practicar:
-% tieneCanasVerdes/1: todos sus hijos tienen menos de 15 años
+% Alguien es un genio si domina todas las áreas de conocimiento que existen
+genio(Personaje):-
+  persona(Personaje),  % generamos el personaje para que sea inversible
+  forall(area(Area), domina(Personaje, Area)). % Para todo Area, ese personaje la domina
+
+%% referente/2 un personaje es referente de un area si sólo él la domina
+referente(Personaje, Area):-
+  domina(Personaje, Area),
+  not( (domina(Otro, Area), Otro \= Personaje) ).
+
+% También puede resolverse usando forall/2 de esta forma que es equivalente
+referente2(Personaje, Area):-
+  domina(Personaje, Area),
+  forall(domina(Otro, Area), Otro = Personaje).
+
+%% todosSonCacahuates/1 se cumple para un restaurante si todos los que comieron ahi
+%% no dominan la ciencia
+
+% Esta versión se cumple para baldeDeCarnada, donde no comió nadie
+todosSonCacahuates(Restaurante):-
+  restaurante(Restaurante),
+  forall(comioEn(Persona, Restaurante), not(domina(Persona, ciencia))).
+
+% Esta versión NO se cumple para baldeDeCarnada, porque además pedimos que alguien haya comido ahí
+todosSonCacahuates2(Restaurante):-
+  comioEn(_, Restaurante),
+  forall(comioEn(Persona, Restaurante), not(domina(Persona, ciencia))).
+
+%% sidekick/2 se cumple si el primero y el segundo son inseparables y el segundo (el amigo copado)
+%% es mas groso.
+%% son inseparables si comen en los mismos restaurantes
+%% alguien es mas groso que otro si domina algun area que el otro no domina, y a su vez
+%% domina todas las areas que el otro personaje domina.
+
+sidekick(Sidekick, Amigo):-
+  sonInseparables(Sidekick, Amigo),
+  esMasGroso(Amigo, Sidekick).
+
+sonInseparables(Persona1, Persona2):-
+  comioEnTodosLosLugaresDondeComio(Persona1, Persona2),
+  comioEnTodosLosLugaresDondeComio(Persona2, Persona1),
+  Persona1 \= Persona2.
+
+comioEnTodosLosLugaresDondeComio(Persona1, Persona2):-
+  comioEn(Persona1,_),
+  comioEn(Persona2, _),
+  forall(comioEn(Persona2, Restaurante), comioEn(Persona1, Restaurante)),
+  Persona1 \= Persona2.
+
+esMasGroso(Groso, NoTanGroso):-
+    domina(Groso, AreaExclusiva),
+    persona(NoTanGroso),
+    not(domina(NoTanGroso, AreaExclusiva)),
+    forall(domina(NoTanGroso, Area), domina(Groso, Area)).
+
+%% sonInseparables también se podría resolver de esta otra forma
+%% que también cumple con ser inversible y simétrico, si no nos interesa
+%% la abstracción comioEnTodosLosLugaresDondeComio/2
+sonInseparables2(Persona1, Persona2):-
+    comioEn(Persona1,_),
+    comioEn(Persona2, _),
+    forall(comioEn(Persona2, Restaurante), comioEn(Persona1, Restaurante)),
+    forall(comioEn(Persona1, Restaurante), comioEn(Persona2, Restaurante)),
+    Persona1 \= Persona2.
