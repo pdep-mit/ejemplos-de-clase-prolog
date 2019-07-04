@@ -12,22 +12,19 @@ Lógica de Primer orden:
  - Para todo
  - Ejercicio: Bob Esponja
 
-
 ## Clase 3
- - Functores
- - Polimorfismo
  - Aritmética
- - Ejercicio: [Pulp Fiction](https://docs.google.com/document/d/1AJdr0JvLmqHKmwHnXFX3edzEGp306IdldtfjJpGpjQQ/edit)
+ - Ejercicio: [Tales of Zestiria](https://docs.google.com/document/d/1TrcfZiwKriniMkeUQTxvgUVCbJla263jYux7o4jVbfw/edit#heading=h.k55i1crzbyp7)
 
 ## Clase 4
-Ejercicio: [Harry Potter](https://drive.google.com/file/d/0B2odHqXdEIRNM0ktSmE3cXBiNW12aE5YdjlBSnpPQnh4Y2xV/view?usp=sharing)
+ - Functores
+ - Polimorfismo
 
 ## Clase 5
  - Listas
- - Ejercicio: Brooklyn 9-9
 
 ## Clase 6
-Ejercicio: [Who you gonna call?](https://docs.google.com/document/d/1GBORNTd2fujNy0Zs6v7AKXxRmC9wVICX2Y-pr7d1PwE/)
+ - Ejercicio
 
 # Ejemplos de años anteriores
 
