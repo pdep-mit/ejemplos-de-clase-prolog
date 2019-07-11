@@ -19,6 +19,9 @@ Lógica de Primer orden:
 ## Clase 4
  - Functores
  - Polimorfismo
+ - Ejercicios:
+   - [Fantasma Blitz](https://docs.google.com/document/d/1uJsb_hN3qq3lq5dsQ9M8Xd17uLwks4gaw04Er3Gn4lk/edit#)
+   - [La copa de las casas](https://docs.google.com/document/d/1s1lRGXwZ_FNtdu6UdvavBWiP91J7oLDaQk2bKy8cPuo/edit#)
 
 ## Clase 5
  - Listas
