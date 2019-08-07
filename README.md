@@ -25,6 +25,7 @@ Lógica de Primer orden:
 
 ## Clase 5
  - Listas
+ - Ejercicio: [Sombrero Seleccionador](https://docs.google.com/document/d/1eA8fWHhu2Gj5Phw-wsM1fhdXs3WvOz7QYn7GJfEpsdA)
 
 ## Clase 6
  - Ejercicio
