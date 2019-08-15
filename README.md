@@ -28,7 +28,7 @@ Lógica de Primer orden:
  - Ejercicio: [Sombrero Seleccionador](https://docs.google.com/document/d/1eA8fWHhu2Gj5Phw-wsM1fhdXs3WvOz7QYn7GJfEpsdA)
 
 ## Clase 6
- - Ejercicio
+ - Ejercicio: [Pulp Fiction 2.0](https://docs.google.com/document/d/1tdt1F3D3pq5ftMZAHaw0KJ_6YalS6YcIs2j_idDTjaI)
 
 # Ejemplos de años anteriores
 
