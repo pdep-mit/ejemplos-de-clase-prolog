@@ -50,5 +50,16 @@ hije(maggie, marge).
 hije(ling, selma).
 
 % hermanes/2 se cumple si ambas personas son hijas de una persona en común.
+hermanes(Persona1, Persona2):-
+	hije(Persona1, Padre),
+	hije(Persona2, Padre),
+	Persona2 \= Persona1.
 
 % descendiente/2 se cumple si la primera persona es descendiente de la segunda
+
+descendiente(Descendiente, Persona):-
+	hije(Descendiente, Persona).
+
+descendiente(Descendiente, Persona):-
+	hije(Descendiente, Padre),
+	descendiente(Padre, Persona).
