@@ -58,7 +58,7 @@ irremplazableRoto3(Persona):-
 % lechuza(NombreLechuza, Sospechosidad, Nobleza).
 lechuza(swi, 10, 60).
 lechuza(duo, 25, 55).
-lechuza(deBlathers, 60, 20).
+lechuza(blathers, 60, 20).
 lechuza(hedwig, 30, 80 ).
 
 /*
@@ -66,15 +66,31 @@ lechuza(hedwig, 30, 80 ).
 Se calcula como 5 * sospechosidad + 42 / nobleza.
 */
 
-
+violencia(Lechuza, NivelDeViolencia):-
+	lechuza(Lechuza, Sospechosidad, Nobleza),
+	NivelDeViolencia is 5 * Sospechosidad + 42 / Nobleza.
 
 /*
 2. Si una lechuza es vengativa.
 Lo es si su violencia es mayor a 100.
 */
 
-
+vengativa(Lechuza):-
+	violencia(Lechuza, Violencia),
+	Violencia > 100.
 
 /*
 3. Si una lechuza es mafiosa, que se cumple si no es buena gente o su sospechosidad es al menos 75. Decimos que es buena gente si no es vengativa y su nobleza es mayor a 50.
 */
+
+mafiosa(Lechuza):-
+	lechuza(Lechuza, _, _),
+	not(buenaGente(Lechuza)).
+mafiosa(Lechuza):-
+	lechuza(Lechuza, Sospechosidad, _),
+	Sospechosidad >= 75.
+
+buenaGente(Lechuza):-
+	lechuza(Lechuza, _, Nobleza),
+	not(vengativa(Lechuza)),
+	Nobleza > 50.
