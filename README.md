@@ -7,6 +7,22 @@ Intro a lógico:
  - Conjunción y disyunción
  - Propiedades de relaciones binarias
 
+Práctica: Programadores
+
+## Clase 2
+
+- Inversibilidad
+- Negación
+- Aritmética
+
+Práctica: Lechuzas Mafiosas
+
+## Clase 3
+
+- Repaso: Existencia y Negación
+- Para Todo
+
+Práctica: TEG
 
 # Ejemplos de años anteriores
 
