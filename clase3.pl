@@ -168,38 +168,54 @@ ocupa(amarillo, sahara, 1).
 ocupa(amarillo, egipto, 5).
 ocupa(amarillo, etiopia, 1).
 
+% Generadores por si hacen falta
+jugador(Jugador):- ocupa(Jugador, _,_).
+continente(Continente):- estaEn(_, Continente).
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Existencia y No Existencia
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Predicados disponibles para trabajar:
+
+% estaEn(Pais, Continente).
+% limitrofes(Pais1, Pais2).
+% ocupa(Jugador, Pais, Ejercitos).
 
 /*
 puedeEntrar/2 que se cumple para un jugador y un continente si no ocupa ningún país del mismo,
 pero sí alguno que es limítrofe de al menos uno de ellos.
 */
 
+puedeEntrar(Jugador, Continente):-
+  estaEn(OtroPais, Continente),
+  ocupa(Jugador, Pais, _),
+  not(ocupaPaisEn(Jugador, Continente)),
+  limitrofes(Pais, OtroPais).
 
-
-
-
-
+ocupaPaisEn(Jugador, Continente):-
+  ocupa(Jugador, Pais, _),
+  estaEn(Pais, Continente).
 
 /*
 seVanAPelear/2 que se cumple para 2 jugadores si son los únicos que ocupan países en un continente,
 y tienen allí algún país fuerte (con más de 4 ejércitos).
 */
 
+seVanAPelear(Jugador, Rival):-
+  ocupaPaisFuerteEn(Jugador, Continente),
+  ocupaPaisFuerteEn(Rival, Continente),
+  Jugador \= Rival,
+  not((ocupaPaisEn(Tercero, Continente), Tercero \= Jugador, Tercero \= Rival)).
 
+ocupaPaisFuerteEn(Jugador, Continente):-
+  ocupa(Jugador, Pais, _),
+  estaEn(Pais, Continente),
+  fuerte(Pais).
 
-
-
-
-
-
-
-
-
-
-
+fuerte(Pais):-
+  ocupa(_, Pais, Ejercitos),
+  Ejercitos > 4.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Para Todo
@@ -209,14 +225,9 @@ y tienen allí algún país fuerte (con más de 4 ejércitos).
 estaRodeado/1 que se cumple para un país si todos sus limítrofes están ocupados por rivales.
 */
 
-
-
-
 ocupadoPorRival(Pais, Jugador):-
   ocupa(Rival, Pais, _),
   Rival \= Jugador.
-
-
 
 % Solución con not/1
 /*
@@ -225,13 +236,16 @@ estaRodeado(Pais):-
   not(( limitrofes(Pais, Otro), not(ocupadoPorRival(Otro, Jugador)) )).
 */
 
-% Solución con forall/2
+% No existe un país que sea limítrofe de Pais y no esté ocupado por un rival de Jugador
+
+% Solución con forall/2, mucho más linda
 
 estaRodeado(Pais):-
   ocupa(Jugador, Pais, _),
   forall(limitrofes(Pais, Otro), ocupadoPorRival(Otro, Jugador)).
 
-
+% Antecedente: para todo país que sea limítrofe de Pais
+% Consecuente: se cumple que ese otro país está ocupado por un rival de Jugador
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Cierre
@@ -241,15 +255,45 @@ estaRodeado(Pais):-
 protegido/1 se cumple para un país si ninguno de sus limítrofes están ocupados por un rival o si es fuerte (tiene más de 4 ejércitos).
 */
 
+protegido(Pais):-
+  fuerte(Pais).
+
+protegido(Pais):-
+  ocupa(Jugador, Pais, _),
+  forall(limitrofes(Pais, Limitrofe), not(ocupadoPorRival(Limitrofe, Jugador))).
+
+% Antecedente: para todo país que sea limítrofe de Pais
+% Consecuente: se cumple que ese Limitrofe no está ocupado por un rival de Jugador
 
 
+%% Alternativa con not/1 en vez de forall/2
+/*
+protegido(Pais):-
+  ocupa(Jugador, Pais, _),
+  not((limitrofes(Pais, Limitrofe), ocupadoPorRival(Limitrofe, Jugador))).
+*/
 
+% No existe un país que sea limítrofe de Pais y esté ocupado por un rival de Jugador
 
 /*
 complicado/2 se cumple para un jugador y un continente si todos los países que ocupa en ese continente están rodeados.
 */
 
+complicado(Jugador, Continente):-
+  ocupaPaisEn(Jugador, Continente),
+  forall((ocupa(Jugador, Pais, _), estaEn(Pais, Continente)), estaRodeado(Pais)).
+
+% Antecedente: para todo país ocupado por Jugador que está en Continente
+% Consecuente: se cumple que ese país está rodeado
 
 /*
 masFuerte/2 se cumple si el país en cuestión es fuerte y además es el que más ejércitos tiene de los que ocupa ese jugador.
 */
+
+masFuerte(Pais, Jugador):-
+  fuerte(Pais),
+  ocupa(Jugador, Pais, MuchosEjercitos),
+  forall((ocupa(Jugador, OtroPais, Ejercitos), OtroPais \= Pais), Ejercitos =< MuchosEjercitos).
+
+% Antecedente: para todo país ocupado por Jugador que no sea Pais, con una cantidad de Ejercitos
+% Consecuente: se cumple que esa cantidad de Ejercitos es menor o igual a la cantidad MuchosEjercitos
