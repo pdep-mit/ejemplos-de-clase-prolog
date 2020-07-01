@@ -39,6 +39,9 @@ estaEn(siberia, asia).
 estaEn(india, asia).
 estaEn(iran, asia).
 estaEn(kamchatka, asia).
+estaEn(turquia, asia).
+estaEn(israel, asia).
+estaEn(arabia, asia).
 
 estaEn(australia, oceania).
 estaEn(sumatra, oceania).
@@ -93,6 +96,10 @@ limitaCon(siberia, mongolia).
 limitaCon(siberia, aral).
 limitaCon(siberia, kamchatka).
 limitaCon(siberia, china).
+limitaCon(turquia, iran).
+limitaCon(israel, turquia).
+limitaCon(arabia, israel).
+limitaCon(arabia, turquia).
 
 limitaCon(australia, sumatra).
 limitaCon(australia, borneo).
@@ -110,11 +117,15 @@ limitaCon(alaska, kamchatka).
 limitaCon(sahara, brasil).
 limitaCon(sahara, espania).
 limitaCon(egipto, polonia).
+limitaCon(turquia, polonia).
+limitaCon(turquia, rusia).
+limitaCon(turquia, egipto).
+limitaCon(israel, egipto).
 
 %% Estado actual de la partida
 
 % ocupa(Jugador, Pais, Ejercitos)
-ocupa(azul, argentina, 4).
+ocupa(azul, argentina, 5).
 ocupa(azul, uruguay, 3).
 ocupa(verde, brasil, 7).
 ocupa(azul, chile, 8).
@@ -134,10 +145,13 @@ ocupa(magenta, aral, 1).
 ocupa(azul, china, 1).
 ocupa(azul, gobi, 1).
 ocupa(azul, india, 1).
-ocupa(azul, iran,1).
+ocupa(azul, iran,8).
 ocupa(verde, mongolia, 1).
 ocupa(verde, siberia, 2).
 ocupa(verde, kamchatka, 2).
+ocupa(amarillo, turquia, 10).
+ocupa(negro, israel, 1).
+ocupa(negro, arabia, 3).
 
 ocupa(azul, australia, 1).
 ocupa(azul, sumatra, 1).
@@ -233,4 +247,9 @@ protegido/1 se cumple para un país si ninguno de sus limítrofes están ocupado
 
 /*
 complicado/2 se cumple para un jugador y un continente si todos los países que ocupa en ese continente están rodeados.
+*/
+
+
+/*
+masFuerte/2 se cumple si el país en cuestión es fuerte y además es el que más ejércitos tiene de los que ocupa ese jugador.
 */
