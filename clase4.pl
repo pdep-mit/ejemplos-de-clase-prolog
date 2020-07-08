@@ -104,7 +104,21 @@ objetivo(azul, ocupar(americaDelSur)).
 % El rojo tiene que ocupar dos países en todos los continentes
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+objetivo(magenta, ocupar(asia)).
+objetivo(magenta, ocuparDosPaisesDe(americaDelSur)).
+
+objetivo(rojo, ocuparDosPaisesDe(Continente)):-
+  continente(Continente).
+
 % cumplioObjetivo(Jugador, Objetivo)
+cumplioObjetivo(Jugador, ocuparDosPaisesDe(Continente)):-
+  ocupa(Jugador, Pais1, _),
+  ocupa(Jugador, Pais2, _),
+  estaEn(Pais1, Continente),
+  estaEn(Pais2, Continente),
+  Pais1 \= Pais2.
+
+
 % Se cumple si ocupa todos los países del continente
 cumplioObjetivo(Jugador, ocupar(Continente)):-
   jugador(Jugador), continente(Continente),
