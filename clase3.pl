@@ -1,3 +1,7 @@
+:- module(clase3, [estaEn/2, limitrofes/2, ocupa/3, continente/1,
+    puedeEntrar/2, seVanAPelear/2, estaRodeado/1,
+    protegido/1, complicado/2, masFuerte/2]).
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% T.E.G.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
