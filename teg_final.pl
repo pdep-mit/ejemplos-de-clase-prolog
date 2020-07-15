@@ -1,5 +1,6 @@
-:- module(teg_final, [estaEn/2, limitrofes/2, ocupa/3,
-    continente/1, jugador/1, ocupaContinente/2, ejercitosPorOcupar/2, gano/1]).
+:- module(teg_final, [estaEn/2, limitrofes/2, ocupa/3, objetivo/2,
+    continente/1, jugador/1, ejercitosPorOcupar/2,
+    ocupaPaisEn/2, ocupaContinente/2, gano/1]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% T.E.G.
@@ -232,14 +233,9 @@ ocupa(amarillo, madagascar, 1).
 ocupa(amarillo, zaire, 1).
 ocupa(amarillo, sudafrica, 1).
 
-% Sabemos quiénes son los jugadores que participaron de la partida
-% más allá de si ocupan países o no, por si alguno fue destruido.
-jugador(rojo).
-jugador(amarillo).
-jugador(verde).
-jugador(negro).
-jugador(magenta).
-jugador(azul).
+% Definimos quiénes son los jugadores que participaron de la partida en base a
+% los objetivos en vez de si ocupan países o no, por si alguno fue destruido.
+jugador(Jugador):- distinct(Jugador, objetivo(Jugador, _)).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Existencia y No Existencia (clase 3)
