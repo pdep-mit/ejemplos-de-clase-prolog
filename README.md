@@ -24,6 +24,22 @@ Práctica: Lechuzas Mafiosas
 
 Práctica: TEG
 
+## Clase 4
+
+- Tipos compuestos (parte 1): Functores
+- Polimorfismo
+
+Práctica: Truco + TEG (objetivos)
+
+## Clase 5
+
+- Tipos compuestos (parte 2): Listas
+- Agregación
+
+Práctica: Estudiantes + TEG (cálculo de ejércitos a incorporar + refactor limítrofes)
+
+![Mapa del TEG](mapa-teg.jpg)
+
 # Ejemplos de años anteriores
 
 - [2019](https://github.com/pdep-mit/ejemplos-de-clase-prolog/tree/2019)
