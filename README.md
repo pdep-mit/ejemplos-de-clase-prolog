@@ -24,6 +24,8 @@ Práctica: Lechuzas Mafiosas
 
 Práctica: TEG
 
+![Mapa del TEG](mapa-teg.jpg)
+
 ## Clase 4
 
 - Tipos compuestos (parte 1): Functores
@@ -38,7 +40,11 @@ Práctica: Truco + TEG (objetivos)
 
 Práctica: Estudiantes + TEG (cálculo de ejércitos a incorporar + refactor limítrofes)
 
-![Mapa del TEG](mapa-teg.jpg)
+## Clase 6
+
+Ejercitación:
+- Se ha formado una pareja (Guía 9 - Ejercicio 5)
+- Viajes (Guía 11 - Ejercicio 10)
 
 # Ejemplos de años anteriores
 
