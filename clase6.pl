@@ -127,11 +127,12 @@ Una persona A quiere dejar a otra B si existe una tercera C tal que:
 - C prefiere a A antes que a su pareja (la que tiene asignada en el contexto).
 */
 
+% Fe de erratas: en la solución hecha en clase se estaba consultando al revés integrante/2
 seDejarian(Pareja1, Pareja2):-
-  integrante(PersonaA, Pareja1),
-  integrante(PersonaB, Pareja1),
-  integrante(PersonaC, Pareja2),
-  integrante(PersonaD, Pareja2),
+  integrante(Pareja1, PersonaA),
+  integrante(Pareja1, PersonaB),
+  integrante(Pareja2, PersonaC),
+  integrante(Pareja2, PersonaD),
   prefiereAntesQue(PersonaA, PersonaC, PersonaB),
   prefiereAntesQue(PersonaC, PersonaA, PersonaD).
 
