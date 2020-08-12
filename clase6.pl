@@ -2,6 +2,16 @@
 %%%%% Se ha formado una pareja - Ej. 9.5 de Mumuki
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+/*
+Predicados disponibles:
+- preferencia(Persona, Preferencia, OtraPersona)
+- parejaPosible(Persona, Pareja)
+  - pareja/3
+- mejorPareja(Persona, MejorPareja).
+- mayorCompatibilidad(UnaPareja, MejorPareja)
+- seVanAPelear(Pareja1, Pareja2)
+*/
+
 % Ana prefiere a Luis antes que a Juan y a Juan antes que a Pedro.
 preferencia(ana, 1,luis).
 preferencia(ana, 2, juan).
@@ -34,18 +44,23 @@ Si una de las dos personas no está interesada en la otra, no será una pareja p
 Por ejemplo, las parejas posibles para Ana serían los functores pareja(ana, luis, 4), pareja(ana, juan, 2) y pareja(ana, pedro, 2).
 */
 
-parejaPosible(???, ???).
-
-
+parejaPosible(Persona, pareja(Persona, OtraPersona, Compatibilidad)):-
+  preferencia(Persona, Preferencia1, OtraPersona),
+  preferencia(OtraPersona, Preferencia2, Persona),
+  Compatibilidad is 6 - Preferencia1 -Preferencia2.
 
 /*
 mejorPareja/2
 Relaciona a una persona con una pareja posible, de modo que se maximice el grado de compatibilidad. Podría haber más de una, en le caso de que el grado de compatibilidad sea el mismo.
 */
 
-mejorPareja(???,???).
+mejorPareja(Persona, MejorPareja):-
+  parejaPosible(Persona, MejorPareja),
+  not(( parejaPosible(Persona, UnaPareja),
+        mayorCompatibilidad(UnaPareja, MejorPareja) )).
 
-
+mayorCompatibilidad(pareja(_,_,CompatibilidadMayor), pareja(_,_,CompatibilidadMenor)):-
+   CompatibilidadMayor > CompatibilidadMenor.
 
 
 /*
@@ -61,15 +76,94 @@ Ejemplo: entre las parejas Ana-Pedro y Nora-Luis, hay problemas dado que Ana pre
 Además también será cierto si sólo uno de los integrantes de la primer pareja también integra la segunda, por ejemplo Ana-Pedro y Luis-Ana.
 */
 
-seVanAPelear(???,???).
+seVanAPelear(Pareja1, Pareja2):-
+  parejaPosible(_, Pareja1),
+  parejaPosible(_, Pareja2),
+  integrantesDistintos(Pareja1, Pareja2),
+  seDejarian(Pareja1, Pareja2).
+
+/*
+seVanAPelear(Pareja1, Pareja2):-
+  parejaPosible(_, Pareja1),
+  parejaPosible(_, Pareja2),
+  integrante(Pareja1, PersonaQueEngania),
+  integrante(Pareja2, PersonaQueEngania),
+  not(( integrante(Pareja2, Otra),
+        Otra \= PersonaQueEngania,
+        integrante(Pareja1, Otra) )).
+*/
+
+seVanAPelear(Pareja1, Pareja2):-
+  parejaPosible(_, Pareja1),
+  parejaPosible(_, Pareja2),
+  integranteEnComun(Pareja1, Pareja2, PersonaQueEngania),
+  not((integranteEnComun(Pareja1, Pareja2, Otra), Otra \= PersonaQueEngania)).
+
+integrante(pareja(Persona, _,_), Persona).
+integrante(pareja(_, Persona,_), Persona).
+
+integranteEnComun(Pareja1, Pareja2, Persona):-
+  integrante(Pareja1, Persona),
+  integrante(Pareja2, Persona).
+
+integrantesDistintos(Pareja1, Pareja2):-
+  not(integranteEnComun(Pareja1, Pareja2, _)).
+
+/*
+integrantesDistintos(Pareja1, Pareja2):-
+  integrante(Pareja1, Integrante1),
+  integrante(Pareja1, Integrante2),
+  integrante(Pareja2, Integrante3),
+  integrante(Pareja2, Integrante4),
+  Integrante1 \= Integrante3,
+  Integrante1 \= Integrante4,
+  Integrante2 \= Integrante3,
+  Integrante2 \= Integrante4.
+*/
+
+/*
+Una persona A quiere dejar a otra B si existe una tercera C tal que:
+- A prefiere a C antes que a B, y
+- C prefiere a A antes que a su pareja (la que tiene asignada en el contexto).
+*/
+
+seDejarian(Pareja1, Pareja2):-
+  integrante(PersonaA, Pareja1),
+  integrante(PersonaB, Pareja1),
+  integrante(PersonaC, Pareja2),
+  integrante(PersonaD, Pareja2),
+  prefiereAntesQue(PersonaA, PersonaC, PersonaB),
+  prefiereAntesQue(PersonaC, PersonaA, PersonaD).
+
+prefiereAntesQue(Persona, Preferida, OtraPersona):-
+  preferencia(Persona, PreferenciaMejor, Preferida),
+  preferencia(Persona, OtraPreferencia, OtraPersona),
+  PreferenciaMejor < OtraPreferencia.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%% Viajes - Ej. 11.10 de Mumuki
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% vuelo(Codigo de vuelo, capacidad en toneladas, [lista de destinos] ), compuestos por functores:
-%  - escala(ciudad, tiempo de espera)
-%  - tramo(tiempo en vuelo)
+/*
+Predicados disponibles:
+- vuelo(Codigo de vuelo, capacidad en toneladas, [lista de destinos] ), compuestos por functores:
+  - escala(ciudad, tiempo de espera)
+  - tramo(tiempo en vuelo)
+
+- tiempoTotalVuelo(Vuelo, TiempoTotal)
+- duracion(Destino, Tiempo)
+- destino(Vuelo, Destino)
+
+- escalaAburrida(Vuelo, Escala)
+- escalaDeVuelo(Vuelo, Escala)
+
+- vueloLargo(Vuelo)
+- tramoDeVuelo(Vuelo, Destino)
+
+- conectados(Vuelo1, Vuelo2)
+- pasaPorCiudad(Vuelo, Ciudad)
+- ciudad(Destino, Ciudad)
+*/
 vuelo(arg845, 30, [escala(rosario,0), tramo(2), escala(buenosAires,0)]).
 vuelo(mh101, 95, [escala(kualaLumpur,0), tramo(9), escala(capeTown,2), tramo(15), escala(buenosAires,0)]).
 vuelo(dlh470, 60, [escala(berlin,0), tramo(9), escala(washington,2), tramo(2), escala(nuevaYork,0)]).
@@ -87,52 +181,108 @@ Definir los siguientes predicados; en todos vamos a identificar cada vuelo por s
 tiempoTotalVuelo/2: que relaciona un vuelo con el tiempo que lleva en total, contando las esperas en las escalas (y eventualmente en el origen y/o destino) más el tiempo de vuelo.
 */
 
-tiempoTotalVuelo(???, ???).
+tiempoTotalVuelo(Vuelo, TiempoTotal):-
+  vuelo(Vuelo, _, _),
+  findall(Duracion, (destino(Vuelo, Destino), duracion(Destino, Duracion)), Tiempos),
+  sum_list(Tiempos, TiempoTotal).
+
+duracion(escala(_, TiempoDeEspera), TiempoDeEspera).
+duracion(tramo(TiempoEnVuelo), TiempoEnVuelo).
+
+destino(Vuelo, Destino):-
+  vuelo(Vuelo, _, Destinos),
+  member(Destino, Destinos).
 
 
 /*
 escalaAburrida/2: Relaciona un vuelo con cada una de sus escalas aburridas; una escala es aburrida si hay que esperar mas de 3 horas.
 */
 
-escalaAburrida(???, ???).
+escalaAburrida(Vuelo, Escala):-
+  escalaDeVuelo(Vuelo, Escala),
+  duracion(Escala, Duracion),
+  Duracion > 3.
+
+escalaDeVuelo(Vuelo, escala(Ciudad, Duracion)):-
+  destino(Vuelo, escala(Ciudad, Duracion)).
 
 
 /*
 vueloLargo/1: Si un vuelo pasa 10 o más horas en el aire, entonces es un vuelo largo. OJO que dice "en el aire", en este punto no hay que contar las esperas en tierra.
 */
 
-vueloLargo(???).
+tramoDeVuelo(Vuelo, tramo(Duracion)):-
+  destino(Vuelo, tramo(Duracion)).
 
-
-
-/*
-conectados/2: Relaciona 2 vuelos si tienen al menos una ciudad en común.
-*/
-
-conectados(???, ???).
-
-
-/*
-bandaDeTres/3: relaciona 3 vuelos si están conectados, el primero con el segundo, y el segundo con el tercero.
-*/
-
-bandaDeTres(???, ???, ???).
-
-
-/*
-distanciaEnEscalas/3: relaciona dos ciudades que son escalas del mismo vuelo y la cantidad de escalas entre las mismas; si no hay escalas intermedias la distancia es 1. No importa de qué vuelo, lo que tiene que pasar es que haya algún vuelo que tenga como escalas a ambas ciudades. Por ejemplo:
-París y Berlín están a distancia 1 (por el vuelo BLE849)
-Berlín y Seúl están a distancia 3 (por el mismo vuelo).
-*/
-
-distanciaEnEscalas(???, ???, ???).
+vueloLargo(Vuelo):-
+  vuelo(Vuelo, _, _),
+  findall(Duracion, (tramoDeVuelo(Vuelo, Destino), duracion(Destino, Duracion)), Tiempos),
+  sum_list(Tiempos, TiempoEnElAire),
+  TiempoEnElAire > 10.
 
 /*
 vueloLento/1: Un vuelo es lento si no es largo, y además cada escala es aburrida.
 */
 
-vueloLento(???).
+vueloLento(Vuelo):-
+  vuelo(Vuelo, _,_),
+  not(vueloLargo(Vuelo)),
+  forall(escalaDeVuelo(Vuelo, Escala), escalaAburrida(Vuelo, Escala)).
 
+/*
+conectados/2: Relaciona 2 vuelos si tienen al menos una ciudad en común.
+*/
+
+conectados(Vuelo1, Vuelo2):-
+  pasaPorCiudad(Vuelo1, Ciudad),
+  pasaPorCiudad(Vuelo2, Ciudad),
+  Vuelo1 \= Vuelo2.
+
+pasaPorCiudad(Vuelo, Ciudad):-
+  destino(Vuelo, Destino),
+  ciudad(Destino, Ciudad).
+
+ciudad(escala(Ciudad, _), Ciudad).
+
+/*
+bandaDeTres/3: relaciona 3 vuelos si están conectados, el primero con el segundo, y el segundo con el tercero.
+*/
+
+bandaDeTres(Vuelo1, Vuelo2, Vuelo3):-
+  conectados(Vuelo1, Vuelo2),
+  conectados(Vuelo2, Vuelo3),
+  Vuelo1 \= Vuelo3.
+
+/*
+distanciaEnEscalas/3: relaciona dos ciudades que son escalas del mismo vuelo y la cantidad de escalas entre las mismas; si no hay escalas intermedias la distancia es 1. No importa de qué vuelo, lo que tiene que pasar es que haya algún vuelo que tenga como escalas a ambas ciudades. Por ejemplo:
+- París y Berlín están a distancia 1 (por el vuelo BLE849)
+- Berlín y Seúl están a distancia 3 (por el mismo vuelo).
+*/
+
+distanciaEnEscalas(Ciudad1, Ciudad2, Distancia):-
+  vuelo(_, _, Destinos),
+  nth1(M, Destinos, escala(Ciudad1, _)),
+  nth1(N, Destinos, escala(Ciudad2, _)),
+  findall(CiudadIntermedia,
+    (nth1(X, Destinos, escala(CiudadIntermedia, _)),
+    entre(M, N, X)),
+    CiudadesIntermedias),
+  length(CiudadesIntermedias, CantCiudadesIntermedias),
+  Distancia is 1 + CantCiudadesIntermedias.
+
+entre(Superior, Inferior, X):-
+  Inferior < X, Superior > X.
+entre(Inferior, Superior, X):-
+  Inferior < X, Superior > X.
+
+/*
+distanciaEnEscalas(Ciudad1, Ciudad2, Distancia):-
+  vuelo(_, _, Destinos),
+  findall(Ciudad, member(escala(Ciudad, _), Destinos), Ciudades),
+  nth1(M, Ciudades, Ciudad1),
+  nth1(N, Ciudades, Ciudad2),
+  Distancia is abs(N - M).
+*/
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%% TESTS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
