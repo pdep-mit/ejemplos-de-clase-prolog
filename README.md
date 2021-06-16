@@ -50,4 +50,4 @@ Enunciado en formato PDF en este mismo repo.
 
 - [2020](https://github.com/pdep-mit/ejemplos-de-clase-prolog/tree/2020)
 - [2019](https://github.com/pdep-mit/ejemplos-de-clase-prolog/tree/2019)
-- [2018](https://github.com/pdep-mit/ejemplos-de-clase-prolog/tree/ejemplos-2018)
+- [2018](https://github.com/pdep-mit/ejemplos-de-clase-prolog/tree/2018)
