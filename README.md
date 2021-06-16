@@ -7,7 +7,7 @@ Intro a lógico:
  - Conjunción y disyunción
  - Propiedades de relaciones binarias
 
-Práctica: Programadores
+Práctica: Árbol genealógico
 
 ## Clase 2
 
@@ -42,11 +42,12 @@ Práctica: Estudiantes + TEG (cálculo de ejércitos a incorporar + refactor lim
 
 ## Clase 6
 
-Ejercitación:
-- Se ha formado una pareja (Guía 9 - Ejercicio 5)
-- Viajes (Guía 11 - Ejercicio 10)
+Práctica integradora: One Piece
+
+Enunciado en formato PDF en este mismo repo.
 
 # Ejemplos de años anteriores
 
+- [2020](https://github.com/pdep-mit/ejemplos-de-clase-prolog/tree/2020)
 - [2019](https://github.com/pdep-mit/ejemplos-de-clase-prolog/tree/2019)
 - [2018](https://github.com/pdep-mit/ejemplos-de-clase-prolog/tree/ejemplos-2018)
