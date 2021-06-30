@@ -50,6 +50,18 @@ irremplazableRoto3(Persona):-
   not(programaEn(Alguien, Lenguaje)),
   Alguien \= Persona.
 
+irremplazableRoto4(Persona):-
+  programaEn(Persona, Lenguaje), % <-- si Persona fuera nahuel (que programa en javascript)
+  persona(Alguien),  % <-- puede ligarse con nahuel, caro y juan
+  Alguien \= Persona, % <-- será cierto para caro y juan
+  not(programaEn(Alguien, Lenguaje)). % <-- como juan no programa en javascript, es cierto
+
+irremplazableRoto5(Persona):-
+  programaEn(Persona, Lenguaje), % <-- si Persona fuera nahuel (que programa en javascript)
+  not(programaEn(Alguien, Lenguaje)), % <-- como existe alguien que programa en javascript (ej. nahuel, es falso)
+  not(Alguien \= Persona). % <-- nunca se llega a esto
+
+%% not(A), not(B) no es lo mismo que not((A, B))
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Lechuzas mafiosas
@@ -66,9 +78,9 @@ lechuza(hedwig, 30, 80 ).
 Se calcula como 5 * sospechosidad + 42 / nobleza.
 */
 
-violencia(Lechuza, NivelDeViolencia):-
-	lechuza(Lechuza, Sospechosidad, Nobleza),
-	NivelDeViolencia is 5 * Sospechosidad + 42 / Nobleza.
+violencia(Lechuza, Violencia):-
+  lechuza(Lechuza, Sospechosidad, Nobleza),
+  Violencia is 5 * Sospechosidad + 42 / Nobleza.
 
 /*
 2. Si una lechuza es vengativa.
@@ -76,21 +88,20 @@ Lo es si su violencia es mayor a 100.
 */
 
 vengativa(Lechuza):-
-	violencia(Lechuza, Violencia),
-	Violencia > 100.
+  violencia(Lechuza, Violencia),
+  Violencia > 100.
 
 /*
 3. Si una lechuza es mafiosa, que se cumple si no es buena gente o su sospechosidad es al menos 75. Decimos que es buena gente si no es vengativa y su nobleza es mayor a 50.
 */
+esBuenaGente(Lechuza):-
+  lechuza(Lechuza, _, Nobleza),
+  not(vengativa(Lechuza)),
+  Nobleza > 50.
 
 mafiosa(Lechuza):-
-	lechuza(Lechuza, _, _),
-	not(buenaGente(Lechuza)).
+  lechuza(Lechuza, Sospechosidad, _),
+  Sospechosidad >= 75.
 mafiosa(Lechuza):-
-	lechuza(Lechuza, Sospechosidad, _),
-	Sospechosidad >= 75.
-
-buenaGente(Lechuza):-
-	lechuza(Lechuza, _, Nobleza),
-	not(vengativa(Lechuza)),
-	Nobleza > 50.
+  lechuza(Lechuza, _,_),
+  not(esBuenaGente(Lechuza)).
