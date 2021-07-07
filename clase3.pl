@@ -1,6 +1,5 @@
-:- module(clase3, [estaEn/2, limitrofes/2, ocupa/3, continente/1,
-    puedeEntrar/2, seVanAPelear/2, estaRodeado/1,
-    protegido/1, complicado/2, masFuerte/2]).
+:- module(clase3, [estaEn/2, limitrofes/2, ocupa/3,
+  puedeEntrar/2, seVanAPelear/2, estaRodeado/1, ocupadoPorRival/2,jugador/1, continente/1, protegido/1, complicado/2, masFuerte/2]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% T.E.G.
@@ -172,10 +171,6 @@ ocupa(amarillo, sahara, 1).
 ocupa(amarillo, egipto, 5).
 ocupa(amarillo, etiopia, 1).
 
-% Generadores por si hacen falta
-jugador(Jugador):- ocupa(Jugador, _,_).
-continente(Continente):- estaEn(_, Continente).
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Existencia y No Existencia
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -190,36 +185,37 @@ continente(Continente):- estaEn(_, Continente).
 puedeEntrar/2 que se cumple para un jugador y un continente si no ocupa ningún país del mismo,
 pero sí alguno que es limítrofe de al menos uno de ellos.
 */
+ocupaAlgunPaisEnContinente(Jugador, Continente):-
+  ocupaPaisEnContinente(Jugador, Continente, _).
 
 puedeEntrar(Jugador, Continente):-
-  estaEn(OtroPais, Continente),
   ocupa(Jugador, Pais, _),
-  not(ocupaPaisEn(Jugador, Continente)),
-  limitrofes(Pais, OtroPais).
-
-ocupaPaisEn(Jugador, Continente):-
-  ocupa(Jugador, Pais, _),
-  estaEn(Pais, Continente).
+  limitrofes(Limitrofe, Pais),
+  estaEn(Limitrofe, Continente),
+  not(ocupaAlgunPaisEnContinente(Jugador, Continente)).
 
 /*
 seVanAPelear/2 que se cumple para 2 jugadores si son los únicos que ocupan países en un continente,
 y tienen allí algún país fuerte (con más de 4 ejércitos).
 */
 
-seVanAPelear(Jugador, Rival):-
-  ocupaPaisFuerteEn(Jugador, Continente),
-  ocupaPaisFuerteEn(Rival, Continente),
-  Jugador \= Rival,
-  not((ocupaPaisEn(Tercero, Continente), Tercero \= Jugador, Tercero \= Rival)).
-
-ocupaPaisFuerteEn(Jugador, Continente):-
+ocupaPaisEnContinente(Jugador, Continente, Pais):-
   ocupa(Jugador, Pais, _),
-  estaEn(Pais, Continente),
-  fuerte(Pais).
+  estaEn(Pais, Continente).
+
+seVanAPelear(Jugador, Rival):-
+  ocupaPaisEnContinente(Jugador, Continente, PaisDeJugador),
+  ocupaPaisEnContinente(Rival, Continente, PaisDeRival),
+  Jugador \= Rival,
+  not((ocupaAlgunPaisEnContinente(OtroJugador, Continente),
+        OtroJugador \= Jugador, OtroJugador \= Rival)),
+  fuerte(PaisDeJugador),
+  fuerte(PaisDeRival).
 
 fuerte(Pais):-
-  ocupa(_, Pais, Ejercitos),
+  ocupa(_,Pais, Ejercitos),
   Ejercitos > 4.
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Para Todo
@@ -251,9 +247,14 @@ estaRodeado(Pais):-
 % Antecedente: para todo país que sea limítrofe de Pais
 % Consecuente: se cumple que ese otro país está ocupado por un rival de Jugador
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Cierre
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Predicados generadores que estaban en la PPT, por si hacen falta
+jugador(Jugador):- ocupa(Jugador, _,_).
+continente(Continente):- estaEn(_, Continente).
 
 /*
 protegido/1 se cumple para un país si ninguno de sus limítrofes están ocupados por un rival o si es fuerte (tiene más de 4 ejércitos).
@@ -262,42 +263,49 @@ protegido/1 se cumple para un país si ninguno de sus limítrofes están ocupado
 protegido(Pais):-
   fuerte(Pais).
 
+%% versión con not
+/*
+protegido(Pais):-
+  ocupa(Jugador, Pais, _),
+  not((
+    limitrofes(Pais, Limitrofe),
+    ocupadoPorRival(Limitrofe, Jugador)
+    )).
+*/
+
+%% versión con forall
 protegido(Pais):-
   ocupa(Jugador, Pais, _),
   forall(limitrofes(Pais, Limitrofe), not(ocupadoPorRival(Limitrofe, Jugador))).
 
-% Antecedente: para todo país que sea limítrofe de Pais
-% Consecuente: se cumple que ese Limitrofe no está ocupado por un rival de Jugador
-
-
-%% Alternativa con not/1 en vez de forall/2
-/*
-protegido(Pais):-
-  ocupa(Jugador, Pais, _),
-  not((limitrofes(Pais, Limitrofe), ocupadoPorRival(Limitrofe, Jugador))).
-*/
-
-% No existe un país que sea limítrofe de Pais y esté ocupado por un rival de Jugador
 
 /*
 complicado/2 se cumple para un jugador y un continente si todos los países que ocupa en ese continente están rodeados.
 */
 
+%% Primera solución: es inversible, pero notamos que si no aseguramos que esté en el continente,
+%% se cumple para quienes no tengan ningún país ahí
+/*
 complicado(Jugador, Continente):-
-  ocupaPaisEn(Jugador, Continente),
-  forall((ocupa(Jugador, Pais, _), estaEn(Pais, Continente)), estaRodeado(Pais)).
+  jugador(Jugador), continente(Continente),
+  forall(ocupaPaisEnContinente(Jugador, Continente, Pais), estaRodeado(Pais)).
+*/
 
-% Antecedente: para todo país ocupado por Jugador que está en Continente
-% Consecuente: se cumple que ese país está rodeado
+%% Segunda solución: ocupaAlgunPaisEnContinente/2 además de ligar ambas variables agrega
+%% la condición necesaria para que no se cumpla para quienes no tienen países en el continente
+complicado(Jugador, Continente):-
+  ocupaAlgunPaisEnContinente(Jugador, Continente),
+  forall(ocupaPaisEnContinente(Jugador, Continente, Pais), estaRodeado(Pais)).
+
 
 /*
 masFuerte/2 se cumple si el país en cuestión es fuerte y además es el que más ejércitos tiene de los que ocupa ese jugador.
 */
 
-masFuerte(Pais, Jugador):-
-  fuerte(Pais),
-  ocupa(Jugador, Pais, MuchosEjercitos),
-  forall((ocupa(Jugador, OtroPais, Ejercitos), OtroPais \= Pais), Ejercitos =< MuchosEjercitos).
-
-% Antecedente: para todo país ocupado por Jugador que no sea Pais, con una cantidad de Ejercitos
-% Consecuente: se cumple que esa cantidad de Ejercitos es menor o igual a la cantidad MuchosEjercitos
+masFuerte(PaisFuerte, Jugador):-
+  fuerte(PaisFuerte),
+  ocupa(Jugador, PaisFuerte, Ejercitos),
+  forall(
+    (ocupa(Jugador, OtroPais, OtrosEjercitos), OtroPais \= PaisFuerte),
+    OtrosEjercitos =< Ejercitos
+  ).
