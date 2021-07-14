@@ -1,5 +1,5 @@
 :- module(clase3, [estaEn/2, limitrofes/2, ocupa/3,
-  puedeEntrar/2, seVanAPelear/2, estaRodeado/1, ocupadoPorRival/2,jugador/1, continente/1, protegido/1, complicado/2, masFuerte/2]).
+  puedeEntrar/2, seVanAPelear/2, estaRodeado/1, ocupadoPorRival/2,continente/1, protegido/1, complicado/2, masFuerte/2]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% T.E.G.

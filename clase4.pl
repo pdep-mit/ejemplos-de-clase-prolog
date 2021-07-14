@@ -78,7 +78,7 @@ gano(Jugador):-
          cumplioObjetivo(Jugador, Objetivo)).
 
 /*
-De momento queremos representar los siguientes:
+Inicialmente queremos representar los siguientes:
 - Destruir al jugador de un color particular.
 - Ocupar un continente indicado.
 - Ocupar 3 países limítrofes entre sí en cualquier parte del mapa.
@@ -98,26 +98,6 @@ objetivo(azul, ocuparTresPaisesLimitrofesEntreSi).
 % y también los continentes oceania y americaDelSur
 objetivo(azul, ocupar(oceania)).
 objetivo(azul, ocupar(americaDelSur)).
-
-%%%%%% Agregado! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% El magenta tiene que ocupar asia y dos países de americaDelSur
-% El rojo tiene que ocupar dos países en todos los continentes
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-objetivo(magenta, ocupar(asia)).
-objetivo(magenta, ocuparDosPaisesDe(americaDelSur)).
-
-objetivo(rojo, ocuparDosPaisesDe(Continente)):-
-  continente(Continente).
-
-% cumplioObjetivo(Jugador, Objetivo)
-cumplioObjetivo(Jugador, ocuparDosPaisesDe(Continente)):-
-  ocupa(Jugador, Pais1, _),
-  ocupa(Jugador, Pais2, _),
-  estaEn(Pais1, Continente),
-  estaEn(Pais2, Continente),
-  Pais1 \= Pais2.
-
 
 % Se cumple si ocupa todos los países del continente
 cumplioObjetivo(Jugador, ocupar(Continente)):-
@@ -143,3 +123,33 @@ ocupaLimitrofes(Jugador, Pais1, Pais2):-
   ocupa(Jugador, Pais1, _),
   ocupa(Jugador, Pais2, _),
   limitrofes(Pais1, Pais2). % Simétrico e irreflexivo
+
+
+%%%%%% Agregado! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% El magenta tiene que ocupar asia y dos países de americaDelSur
+% El rojo tiene que ocupar dos países en todos los continentes
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+objetivo(magenta, ocupar(asia)).
+objetivo(magenta, ocuparDosPaisesDe(americaDelSur)).
+
+%% Solución por extensión, no está buena, se puede generalizar
+/*
+objetivo(rojo, ocuparDosPaisesDe(asia)).
+objetivo(rojo, ocuparDosPaisesDe(americaDelSur)).
+objetivo(rojo, ocuparDosPaisesDe(americaDelNorte)).
+objetivo(rojo, ocuparDosPaisesDe(oceania)).
+objetivo(rojo, ocuparDosPaisesDe(europa)).
+objetivo(rojo, ocuparDosPaisesDe(africa)).
+*/
+
+%% Solución por comprensión
+objetivo(rojo, ocuparDosPaisesDe(Continente)):-
+  continente(Continente).
+
+cumplioObjetivo(Jugador, ocuparDosPaisesDe(Continente)):-
+  ocupa(Jugador, Pais1, _),
+  estaEn(Pais1, Continente),
+  ocupa(Jugador, Pais2, _),
+  estaEn(Pais2, Continente),
+  Pais1 \= Pais2.
