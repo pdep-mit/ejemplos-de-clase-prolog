@@ -97,140 +97,22 @@ cantidadDeEjercitosAIncorporar(Jugador, Ejercitos):-
   Ejercitos is PorContinentes + PorPaises.
 
 % la mitad de los países que ocupa (se redondea para abajo), ó 3 si no llega a los 6 países
-cantidadDeEjercitosPorPaisesOcupados(Jugador, Ejercitos):-
-  cantidadDePaises(Jugador, CantidadPaises),
-  CantidadPaises >= 6,
-  Ejercitos is CantidadPaises // 2.
-cantidadDeEjercitosPorPaisesOcupados(Jugador, 3):-
-  cantidadDePaises(Jugador, CantidadPaises),
-  CantidadPaises < 6.
-
-cantidadDePaises(Jugador, CantidadPaises):-
+cantidadDeEjercitosPorPaisesOcupados(Jugador, CantidadDeEjercitosAPoner):-
   jugador(Jugador),
   findall(Pais, ocupa(Jugador, Pais, _), Paises),
-  length(Paises, CantidadPaises).
+  length(Paises, CantidadDePaises),
+  ejercitosQueDaTotalDePaises(CantidadDePaises, CantidadDeEjercitosAPoner).
+
+ejercitosQueDaTotalDePaises(CantidadDePaises, Ejercitos) :-
+  CantidadDePaises >= 6,
+  Ejercitos is CantidadDePaises // 2.
+ejercitosQueDaTotalDePaises(CantidadDePaises, 3) :-
+  CantidadDePaises < 6.
 
 % sumatoria de lo que corresponda por cada continente ocupado por completo
-
-% ocupaContinente(Jugador, Continente), ejercitosPorOcupar(Continente, Ejercitos)
-cantidadDeEjercitosPorContinentesOcupados(Jugador, Ejercitos):-
+cantidadDeEjercitosPorContinentesOcupados(Jugador, CantidadDeEjercitosAPoner):-
   jugador(Jugador),
   findall(EjercitosPorContinente,
-      (ocupaContinente(Jugador, Continente),
-      ejercitosPorOcupar(Continente, EjercitosPorContinente)),
-    ListaEjercitos),
-  sum_list(ListaEjercitos, Ejercitos).
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Consultas de fin de clase, jugamos con distinct/1 y distinct/2
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-/*
-
-1. ¿Cuáles son los limítrofes de China?
-
-- sin limitar las respuestas:
-
-?- limitrofes(china, Pais).
-Pais = india ;
-Pais = malasia ;
-Pais = india ;
-Pais = iran ;
-Pais = gobi ;
-Pais = iran ;
-Pais = gobi ;
-Pais = mongolia ;
-Pais = siberia ;
-Pais = mongolia ;
-Pais = siberia ;
-Pais = kamchatka ;
-Pais = japon ;
-Pais = kamchatka ;
-false.
-
-- asegurando que las respuestas sean distintas entre ellas:
-
-?- distinct(limitrofes(china, Pais)).
-Pais = india ;
-Pais = malasia ;
-Pais = iran ;
-Pais = gobi ;
-Pais = mongolia ;
-Pais = siberia ;
-Pais = kamchatka ;
-Pais = japon ;
-false.
-
-2. ¿Cuántos son los limítrofes de China?
-
-- sin limitar a respuestas distintas, no es lo que buscamos:
-
-?- findall(Pais, limitrofes(china, Pais), Paises), length(Paises, Cantidad).
-Paises = [india, malasia, india, iran, gobi, iran, gobi, mongolia, siberia|...],
-Cantidad = 14.
-
-- evitando respuestas repetidas, sí es correcta la cantidad:
-
-?- findall(Pais, distinct(limitrofes(china, Pais)), Paises), length(Paises, Cantidad).
-Paises = [india, malasia, iran, gobi, mongolia, siberia, kamchatka, japon],
-Cantidad = 8.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-Para consultas existenciales donde algunas cosas no nos interesan (con variable anónima),
-usar distinct/2 en vez de distinct/1, para indicarle qué es lo que nos interesa que sea distinto.
-
-Ejemplo: ¿qué jugadores ocupan algún país con un único ejército?
-
-- sin limitar la respuesta:
-?- ocupa(Jugador, _, 1).
-Jugador = verde ;
-Jugador = verde ;
-Jugador = rojo ;
-Jugador = rojo ;
-Jugador = amarillo ;
-Jugador = verde ;
-Jugador = amarillo ;
-Jugador = amarillo ;
-Jugador = magenta ;
-Jugador = azul ... etc
-
-- con distinct/1 parece funcionar igual, y es porque hay un _
-?- distinct(ocupa(Jugador, _, 1)).
-Jugador = verde ;
-Jugador = verde ;
-Jugador = rojo ;
-Jugador = rojo ;
-Jugador = amarillo ;
-Jugador = verde ;
-Jugador = amarillo ;
-Jugador = amarillo ;
-Jugador = magenta ;
-Jugador = azul ... etc
-
-- con distinct/2 hace lo que queremos:
-?- distinct(Jugador, ocupa(Jugador, _, 1)).
-Jugador = verde ;
-Jugador = rojo ;
-Jugador = amarillo ;
-Jugador = magenta ;
-Jugador = azul ;
-Jugador = negro ;
-false.
-
-Nota: antes la duda, siempre se puede directamnete usar distinct/2, por ejemplo
-
-?- distinct(Pais, limitrofes(china, Pais)).
-Pais = india ;
-Pais = malasia ;
-Pais = iran ;
-Pais = gobi ;
-Pais = mongolia ;
-Pais = siberia ;
-Pais = kamchatka ;
-Pais = japon ;
-false.
-
-*/
+    (ocupaContinente(Jugador, Continente), ejercitosPorOcupar(Continente, EjercitosPorContinente)) ,
+    ListaConEjercitos),
+  sum_list(ListaConEjercitos, CantidadDeEjercitosAPoner).
