@@ -40,110 +40,110 @@ impactoEnRecompensa(hatchan, llegadaAEastBlue, 3000).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%% Punto 1
-participaronDelMismoEvento(Tripulacion1, Tripulacion2, Evento):-
-  participoDeEvento(Tripulacion1, Evento),
-  participoDeEvento(Tripulacion2, Evento),
+% Punto 1
+
+seCruzaronEn(Tripulacion1, Tripulacion2, Evento):-
+  participoEnEvento(Tripulacion1, Evento),
+  participoEnEvento(Tripulacion2, Evento),
   Tripulacion1 \= Tripulacion2.
 
-participoDeEvento(Tripulacion, Evento):-
-  impactoEnRecompensa(Pirata, Evento, _),
-  tripulante(Pirata, Tripulacion).
+participoEnEvento(Tripulacion, Evento):-
+  tripulante(Pirata, Tripulacion),
+  impactoEnRecompensa(Pirata, Evento, _).
 
-%% Punto 2
-pirataMasDestacado(Pirata, Evento):-
-  impactoEnRecompensa(Pirata, Evento, Recompensa),
-  not((
-    impactoEnRecompensa(_, Evento, OtraRecompensa),
-    OtraRecompensa > Recompensa
-  )).
+% Punto 2
 
-pirataMasDestacadoV2(Pirata, Evento):-
-  impactoEnRecompensa(Pirata, Evento, Recompensa),
+/*
+pirataQueMasSeDestaco(PirataDestacado, Evento):-
+  impactoEnRecompensa(PirataDestacado, Evento, MontoMayor),
+  not((impactoEnRecompensa(Pirata, Evento, Monto),
+       Pirata \= PirataDestacado, Monto > MontoMayor)).
+*/
+
+pirataQueMasSeDestaco(PirataDestacado, Evento):-
+  impactoEnRecompensa(PirataDestacado, Evento, MontoMayor),
   forall(
-    (impactoEnRecompensa(OtroPirata, Evento, OtraRecompensa), OtroPirata \= Pirata),
-    Recompensa > OtraRecompensa
-  ).
+    (impactoEnRecompensa(Pirata, Evento, Monto), Pirata \= PirataDestacado), Monto =< MontoMayor).
 
-%% Punto 3
+% Punto 3
+
 pasoDesapercibido(Pirata, Evento):-
   tripulante(Pirata, Tripulacion),
-  participoDeEvento(Tripulacion, Evento),
+  participoEnEvento(Tripulacion, Evento),
   not(impactoEnRecompensa(Pirata, Evento, _)).
 
-%% Punto 4
+% Punto 4
+
 recompensaTotal(Tripulacion, RecompensaTotal):-
   tripulante(_, Tripulacion),
-  findall(RecompensaActual,
-    (tripulante(Pirata, Tripulacion), recompensaActual(Pirata, RecompensaActual)),
-    RecompensasTripulantes
-  ),
-  sum_list(RecompensasTripulantes, RecompensaTotal).
+  findall(RecompensaPirata,
+    (tripulante(Pirata, Tripulacion), recompensaActual(Pirata, RecompensaPirata)),
+    Recompensas),
+  sum_list(Recompensas, RecompensaTotal).
 
-recompensaActual(Pirata, RecompensaActual):-
+recompensaActual(Pirata, RecompensaPirata):-
   tripulante(Pirata, _),
-  findall(Recompensa,
-    impactoEnRecompensa(Pirata, _, Recompensa), RecompensasEventos),
-  sum_list(RecompensasEventos, RecompensaActual).
+  findall(Recompensa, impactoEnRecompensa(Pirata, _, Recompensa), Recompensas),
+  sum_list(Recompensas, RecompensaPirata).
 
-%% Versión más simple, pero sin abstracción copada
-recompensaTotalV2(Tripulacion, RecompensaTotal):-
-  tripulante(_, Tripulacion),
-  findall(Recompensa,
-    (tripulante(Pirata, Tripulacion),
-    impactoEnRecompensa(Pirata, _, Recompensa)),
-    RecompensasTripulantes
-  ),
-  sum_list(RecompensasTripulantes, RecompensaTotal).
+% Punto 5
 
-%% Punto 5
-tripulacionTemible(Tripulacion):-
-  tripulante(_, Tripulacion),
-  forall(tripulante(Pirata, Tripulacion),
-         peligroso(Pirata)).
-tripulacionTemible(Tripulacion):-
+temible(Tripulacion):-
   recompensaTotal(Tripulacion, RecompensaTotal),
   RecompensaTotal > 500000000.
+temible(Tripulacion):-
+  tripulante(_, Tripulacion),
+  forall(tripulante(Pirata, Tripulacion), esPeligroso(Pirata)).
 
-peligroso(Pirata):-
-  recompensaActual(Pirata, RecompensaActual),
-  RecompensaActual > 100000000.
+esPeligroso(Pirata):-
+  recompensaActual(Pirata, Recompensa),
+  Recompensa > 100000000.
 
-%% Punto 6
-peligroso(Pirata):-
-  comio(Pirata, Fruta),
+% Punto 6
+
+esPeligroso(Pirata):-
+  comioFruta(Pirata, Fruta),
   frutaPeligrosa(Fruta).
 
-comio(luffy, paramecia(gomugomu)).
-comio(buggy, paramecia(barabara)).
-comio(law, paramecia(opeope)).
-comio(chopper, zoan(hitohito, humano)).
-comio(lucci, zoan(nekoneko, leopardo)).
-comio(smoker, logia(mokumoku, humo)).
+comioFruta(luffy, paramecia(gomugomu)).
+comioFruta(buggy, paramecia(barabara)).
+comioFruta(law, paramecia(opeope)).
+comioFruta(chopper, zoan(hitohito, humano)).
+comioFruta(lucci, zoan(nekoneko, leopardo)).
+comioFruta(smoker, logia(mokumoku, humo)).
 
 frutaPeligrosa(paramecia(opeope)).
 frutaPeligrosa(zoan(_, Especie)):-
-  especieFeroz(Especie).
+  feroz(Especie).
 frutaPeligrosa(logia(_,_)).
 
-especieFeroz(lobo).
-especieFeroz(leopardo).
-especieFeroz(anaconda).
+feroz(lobo).
+feroz(leopardo).
+feroz(anaconda).
 
-%%% No se pedía, pero porque surgio la duda
+/*
+Esto no se pedía, fue para mostrar nada más cómo podría relacionarse una fruta con su nombre, o con su tipo si fuera necesario
+*/
 nombreDeFruta(paramecia(Nombre), Nombre).
 nombreDeFruta(zoan(Nombre, _), Nombre).
 nombreDeFruta(logia(Nombre, _), Nombre).
 
+tipoDeFruta(paramecia(_), paramecia).
+tipoDeFruta(zoan(_, _), zoan).
+tipoDeFruta(logia(_, _), logia).
+
+%% Punto 7
+
+/*
 piratasDeAsfalto(Tripulacion):-
   tripulante(_, Tripulacion),
-  not((tripulante(Pirata, Tripulacion),
-      puedeNadar(Pirata))).
+  forall(tripulante(Pirata, Tripulacion), not(puedeNadar(Pirata))).
+*/
+
+piratasDeAsfalto(Tripulacion):-
+  tripulante(_, Tripulacion),
+  not((tripulante(Pirata, Tripulacion), puedeNadar(Pirata))).
 
 puedeNadar(Persona):-
-  not(comio(Persona, _)).
-
-piratasDeAsfaltoV2(Tripulacion):-
-  tripulante(_,Tripulacion),
-  forall(tripulante(Pirata, Tripulacion),
-          not(puedeNadar(Pirata))).
+  tripulante(Persona, _),
+  not(comioFruta(Persona, _)).
