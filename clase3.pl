@@ -45,6 +45,7 @@ estaEn(kamchatka, asia).
 estaEn(turquia, asia).
 estaEn(israel, asia).
 estaEn(arabia, asia).
+estaEn(tartaria, asia).
 
 estaEn(australia, oceania).
 estaEn(sumatra, oceania).
@@ -89,6 +90,7 @@ limitaCon(iran,india).
 limitaCon(china,iran).
 limitaCon(gobi,china).
 limitaCon(aral, iran).
+limitaCon(aral, tartaria).
 limitaCon(gobi, iran).
 limitaCon(china, kamchatka).
 limitaCon(mongolia, gobi).
@@ -99,6 +101,7 @@ limitaCon(siberia, mongolia).
 limitaCon(siberia, aral).
 limitaCon(siberia, kamchatka).
 limitaCon(siberia, china).
+limitaCon(siberia, tartaria).
 limitaCon(turquia, iran).
 limitaCon(israel, turquia).
 limitaCon(arabia, israel).
@@ -155,6 +158,7 @@ ocupa(verde, kamchatka, 2).
 ocupa(amarillo, turquia, 10).
 ocupa(negro, israel, 1).
 ocupa(negro, arabia, 3).
+ocupa(verde, tartaria, 3).
 
 ocupa(azul, australia, 1).
 ocupa(azul, sumatra, 1).
