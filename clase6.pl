@@ -1,5 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%% Se ha formado una pareja - Ej. 9.5 de Mumuki
+%%%%% Se ha formado una pareja - Ej. 9.5 de Mumuki 
+%%%%% Consignas: https://github.com/pdep-utn/mumuki-guia-logico-practica-functores-pdep-utn/blob/master/00502_Se%20ha%20formado%20una%20pareja/description.md
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 /*
@@ -143,6 +144,7 @@ prefiereAntesQue(Persona, Preferida, OtraPersona):-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%% Viajes - Ej. 11.10 de Mumuki
+%%%%% Consignas: https://github.com/pdep-utn/mumuki-guia-logico-practica-listas/blob/master/00004_viajes/description.md
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 /*

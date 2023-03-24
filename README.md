@@ -42,9 +42,9 @@ Práctica: Estudiantes + TEG (cálculo de ejércitos a incorporar + refactor lim
 
 ## Clase 6
 
-Ejercitación:
-- Se ha formado una pareja (Guía 9 - Ejercicio 5)
-- Viajes (Guía 11 - Ejercicio 10)
+Ejercicios de Mumuki a pedido del público:
+- [Se ha formado una pareja (Guía 9 - Ejercicio 5)](https://github.com/pdep-utn/mumuki-guia-logico-practica-functores-pdep-utn/blob/master/00502_Se%20ha%20formado%20una%20pareja/description.md)
+- [Viajes (Guía 11 - Ejercicio 10)](https://github.com/pdep-utn/mumuki-guia-logico-practica-listas/blob/master/00004_viajes/description.md)
 
 # Ejemplos de años anteriores
 
