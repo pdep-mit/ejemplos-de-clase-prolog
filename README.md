@@ -46,6 +46,12 @@ Práctica integradora: One Piece
 
 Enunciado en formato PDF en este mismo repo.
 
+## EXTRA
+
+Práctica integradora: Improlog
+
+Enunciado en formato PDF en este mismo repo.
+
 # Ejemplos de años anteriores
 
 - [2020](https://github.com/pdep-mit/ejemplos-de-clase-prolog/tree/2020)
